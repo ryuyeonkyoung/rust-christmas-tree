@@ -1,5 +1,6 @@
 use crate::ornament::{LightMode, Ornament};
-use crossterm::style::Color;
+use crate::colors::random_color;
+use rand::seq::SliceRandom;
 
 /// Represents the Christmas tree with its ornaments
 pub struct ChristmasTree {
@@ -12,23 +13,33 @@ impl ChristmasTree {
     /// Creates a new Christmas tree with default ornaments
     pub fn new() -> Self {
         let mut ornaments = Vec::new();
-        let x = 0; // TODO: ornament를 상대 경로로 변경 (트리를 옮기면 따라가도록)
-        let y = 0;
 
-        // Add some blinking ornaments at predefined positions
-        // These positions correspond to the ASCII tree structure
-        ornaments.push(Ornament::new(x + 7, y + 3, Color::Red, LightMode::Blinking));
-        ornaments.push(Ornament::new(x + 6, y + 4, Color::Yellow, LightMode::Blinking));
-        ornaments.push(Ornament::new(x + 9, y + 4, Color::Blue, LightMode::Blinking));
-        ornaments.push(Ornament::new(x + 7, y + 6, Color::Magenta, LightMode::Blinking));
-        ornaments.push(Ornament::new(x + 13, y + 6, Color::Cyan, LightMode::Blinking));
-        ornaments.push(Ornament::new(x + 6, y + 7, Color::Green, LightMode::Blinking));
-        ornaments.push(Ornament::new(x + 14, y + 7, Color::Red, LightMode::Blinking));
+        // Get ASCII art and compute dimensions
+        let tree_lines = Self::get_ascii_tree();
+        let height = tree_lines.len() as u16;
+        let width = tree_lines
+            .iter()
+            .map(|l| l.len())
+            .max()
+            .unwrap_or(0) as u16;
+
+        // Collect valid positions inside the canopy (here: '*' positions)
+        let mut positions = Self::canopy_positions(&tree_lines);
+
+        // Shuffle and pick some positions without duplicates
+        let mut rng = rand::thread_rng();
+        positions.shuffle(&mut rng);
+
+        // 원하는 오너먼트 수 (안정적으로 캔버스 크기 내에서만)
+        let desired = 8usize.min(positions.len());
+        for (x, y) in positions.into_iter().take(desired) {
+            ornaments.push(Ornament::new(x, y, random_color(), LightMode::Blinking));
+        }
 
         Self {
             ornaments,
-            width: 20,
-            height: 12,
+            width,
+            height,
         }
     }
 
