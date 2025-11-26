@@ -8,7 +8,9 @@ use crossterm::{
 };
 use std::io::{self, Write};
 use std::time::Duration;
+use crate::colors::brown;
 
+// TODO: 깜박이는 프레임 부드럽게 하기
 /// Main animation loop handler
 pub struct AnimationLoop {
     pub tree: ChristmasTree,
@@ -56,7 +58,7 @@ impl AnimationLoop {
             self.render()?;
 
             // Frame timing (approximately 10 FPS)
-            std::thread::sleep(Duration::from_millis(100));
+            std::thread::sleep(Duration::from_millis(300));
             self.frame_count += 1;
         }
 
@@ -114,6 +116,7 @@ impl AnimationLoop {
                 let y_pos = y as u16;
 
                 // Check if there's an ornament at this position
+                // TODO: 한줄 랜더링마다 모든 ornament 좌표를 순회해서 확인중, 같으면 대체하는 방식
                 let ornament = self
                     .tree
                     .ornaments
@@ -134,9 +137,8 @@ impl AnimationLoop {
                 } else {
                     // Render tree structure with color
                     let color = match ch {
-                        '*' => Color::Yellow,
-                        '/' | '\\' => Color::Green,
-                        '|' => Color::DarkRed,
+                        '*' => Color::Green,
+                        '|' => brown(),
                         'o' => Color::Red,
                         _ => Color::White,
                     };
@@ -150,7 +152,7 @@ impl AnimationLoop {
             stdout,
             cursor::MoveTo(0, (tree_lines.len() + 2) as u16),
             SetForegroundColor(Color::DarkGrey),
-            Print("Press 'q' or ESC to quit"),
+            // Print("Press 'q' or ESC to quit"),
             ResetColor
         )?;
 

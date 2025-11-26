@@ -1,6 +1,12 @@
 use crossterm::style::Color;
 use rand::Rng;
 
+/// Returns a brown color (RGB)
+pub fn brown() -> Color {
+    // RGB for a typical "brown" (you can adjust)
+    Color::Rgb { r: 165, g: 42, b: 42 }
+}
+
 /// Utility functions for color management
 
 /// Returns a random color from a predefined palette
@@ -13,6 +19,7 @@ pub fn random_color() -> Color {
         Color::Yellow,
         Color::Magenta,
         Color::Cyan,
+        brown(),
     ];
     colors[rng.gen_range(0..colors.len())]
 }

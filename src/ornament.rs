@@ -26,6 +26,7 @@ pub struct Ornament {
 
 impl Ornament {
     /// Creates a new ornament at the specified position
+    // TODO: ornament 위치에 대한 검증 추가
     pub fn new(x: u16, y: u16, color: Color, light_mode: LightMode) -> Self {
         Self {
             x,
@@ -39,11 +40,13 @@ impl Ornament {
 
     /// Updates the ornament state (for animation)
     pub fn update(&mut self) {
+        let blink_num_limit = 5;
+
         match self.light_mode {
             LightMode::Blinking => {
                 self.blink_counter += 1;
                 // Toggle visibility every 5 frames
-                if self.blink_counter >= 5 {
+                if self.blink_counter >= blink_num_limit {
                     self.is_visible = !self.is_visible;
                     self.blink_counter = 0;
                 }
