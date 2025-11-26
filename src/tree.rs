@@ -31,7 +31,7 @@ impl ChristmasTree {
         positions.shuffle(&mut rng);
 
         // 원하는 오너먼트 수 (안정적으로 캔버스 크기 내에서만)
-        let desired = 8usize.min(positions.len());
+        let desired = 100;
         for (x, y) in positions.into_iter().take(desired) {
             ornaments.push(Ornament::new(x, y, random_color(), LightMode::Blinking));
         }
