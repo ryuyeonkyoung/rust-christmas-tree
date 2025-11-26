@@ -14,12 +14,11 @@ pub fn random_color() -> Color {
     let mut rng = rand::thread_rng();
     let colors = [
         Color::Red,
-        Color::Green,
         Color::Blue,
         Color::Yellow,
         Color::Magenta,
         Color::Cyan,
-        brown(),
+        Color::White,
     ];
     colors[rng.gen_range(0..colors.len())]
 }

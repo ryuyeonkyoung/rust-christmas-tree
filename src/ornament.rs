@@ -1,4 +1,5 @@
-use crossterm::style::Color;
+use crossterm::style::{Color, Colors};
+use crate::colors::random_color;
 
 /// Represents different lighting modes for ornaments
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -47,7 +48,7 @@ impl Ornament {
                 self.blink_counter += 1;
                 // Toggle visibility every 5 frames
                 if self.blink_counter >= blink_num_limit {
-                    self.is_visible = !self.is_visible;
+                    self.color= random_color();
                     self.blink_counter = 0;
                 }
             }
